@@ -1,0 +1,27 @@
+FROM ubuntu:latest
+
+EXPOSE 22
+
+COPY ./start.sh /start.sh
+
+RUN apt-get update && apt-get install -y \
+    openssh-server \
+    net-tools \
+    iputils-ping \
+    traceroute \
+    vim \
+    iproute2 \
+    tcpdump \
+    nmap \
+    iptables \
+    pkg-config \
+    curl 
+
+# Crea el directorio /run/sshd
+RUN mkdir -p /run/sshd
+
+RUN echo 'root:root' | chpasswd
+
+RUN chmod +x /start.sh
+
+CMD ["/start.sh"]
