@@ -29,6 +29,9 @@ RUN echo 'ServerName localhost' >> /etc/apache2/apache2.conf
 # Creo usuario ROOR
 RUN echo 'root:root' | chpasswd
 
+# Permito la conexion con root
+RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
 # Creo un usuario sin privilegios para crowie
 RUN useradd -m sico && echo 'sico:sico' | chpasswd
 

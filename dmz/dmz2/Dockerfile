@@ -26,6 +26,9 @@ RUN mkdir -p /run/sshd
 # Configuro el servicio apache
 RUN echo 'ServerName localhost' >> /etc/apache2/apache2.conf
 
+# Permito la conexion con root
+RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
 #Creo usuario ROOR
 RUN echo 'root:root' | chpasswd
 

@@ -25,5 +25,8 @@ iptables -A FORWARD -i eth2 -s 10.5.2.0/24 -o eth1 -p tcp -j ACCEPT
 iptables -A FORWARD -i eth2 -s 10.5.2.0/24 -o eth1 -p udp -j ACCEPT 
 iptables -A FORWARD -i eth2 -s 10.5.2.0/24 -o eth1 -p icmp -j ACCEPT
 
+# Configuro el fw para que enmascare las IPs de la red interna con la Ip de la gateway de la red externa
+iptables -t nat -A POSTROUTING -s 10.5.2.0/24 -o eth1 -j SNAT --to-source 10.5.0.1
+
 # Iniciar servicio sshd
 /usr/sbin/sshd -D

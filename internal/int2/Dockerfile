@@ -20,6 +20,9 @@ RUN apt-get update && apt-get install -y \
 # Crea el directorio /run/sshd
 RUN mkdir -p /run/sshd
 
+# Permito la conexion con root
+RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
 RUN echo 'root:root' | chpasswd
 
 RUN chmod +x /start.sh

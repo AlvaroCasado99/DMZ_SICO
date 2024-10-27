@@ -25,6 +25,9 @@ RUN mkdir -p /run/sshd
 
 RUN echo 'ServerName localhost' >> /etc/apache2/apache2.conf
 
+# Permito la conexion con root
+RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
 RUN echo 'root:root' | chpasswd
 
 RUN chmod +x /start.sh
