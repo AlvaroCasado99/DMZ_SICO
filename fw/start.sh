@@ -20,6 +20,7 @@ iptables -A FORWARD -p tcp -m state --state ESTABLISHED,RELATED -j ACCEPT
 iptables -A FORWARD -p udp -m state --state ESTABLISHED,RELATED -j ACCEPT
 iptables -A FORWARD -p icmp -m state --state ESTABLISHED,RELATED -j ACCEPT
 
+# Permitir todas las conexiones que salcan de la red intena 
 iptables -A FORWARD -i eth2 -s 10.5.2.0/24 -o eth1 -p tcp -j ACCEPT 
 iptables -A FORWARD -i eth2 -s 10.5.2.0/24 -o eth1 -p udp -j ACCEPT 
 iptables -A FORWARD -i eth2 -s 10.5.2.0/24 -o eth1 -p icmp -j ACCEPT

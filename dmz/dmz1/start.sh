@@ -9,8 +9,9 @@ route del default gw 10.5.1.254
 # Cambiar nombre interefaz
 ip link set eth0 name dmz1
 
+# Iniciar servicio sshd
+/usr/sbin/sshd
+
 # Iniciar servico httpd
 apache2ctl -D FOREGROUND
 
-# Iniciar servicio sshd
-/usr/sbin/sshd -D
