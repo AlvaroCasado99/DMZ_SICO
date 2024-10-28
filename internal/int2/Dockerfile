@@ -15,7 +15,8 @@ RUN apt-get update && apt-get install -y \
     nmap \
     iptables \
     pkg-config \
-    curl 
+    curl \ 
+    hping3
 
 # Crea el directorio /run/sshd
 RUN mkdir -p /run/sshd

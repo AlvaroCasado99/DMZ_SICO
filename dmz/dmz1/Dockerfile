@@ -18,7 +18,8 @@ RUN apt-get update && apt-get install -y \
     iptables \
     pkg-config \
     apache2 \
-    curl 
+    curl \
+    hping3
 
 # Crea el directorio /run/sshd
 RUN mkdir -p /run/sshd
