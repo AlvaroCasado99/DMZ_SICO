@@ -54,13 +54,6 @@ RUN sed -i 's/#MaxAuthTries 6/MaxAuthTries 6/' /etc/ssh/sshd_config
 RUN sed -i 's/#Banner none/Banner custom_banner/' /etc/ssh/sshd_config
 
 # TODO: Fail2Ban
-# ---Configure rsyslog to allow authentication logging 
-RUN echo "auth,authpriv.* /var/log/auth.log" >> /etc/rsyslog.conf
-# ---Create logfile for Fail2ban
-RUN sed -i 's/#SyslogFacility AUTH/SyslogFacility AUTH/' /etc/ssh/sshd_config
-RUN sed -i 's/#LogLevel INFO/LogLevel INFO/' /etc/ssh/sshd_config
-# ---Make sure log file exists
-RUN touch /var/log/auth.log 
 
 # TODO: Multififactor Authenticator (GoogleAuth)
 #RUN echo "auth required pam_google_authenticator.so" >> /etc/pam.d/sshd

@@ -3,12 +3,12 @@
 # Initialize google-authenticator
 #google-authenticator
 
+
 # Start rsyslog daemon
-# ... Con service no arranca
 rsyslogd
 
 # Start Fail2Ban service
-service fail2ban start
+fail2ban-server -f &
 
 # Start SSH service
 /usr/sbin/sshd -D

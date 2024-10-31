@@ -280,10 +280,10 @@ action = %(action_)s
 enabled = true
 port = 2222
 filter = sshd
-logpath = /var/log/auth.log
+logpath = %(sshd_log)s
 maxretry = 2
 bantime = 600
-#ignoreip = 127.0.0.1
+ignoreip = 127.0.0.1
 
 [dropbear]
 
