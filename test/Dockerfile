@@ -11,11 +11,13 @@ RUN apt-get update && apt-get install -y \
 	openssh-server \
 	iputils-ping \
 	iproute2 \
+	iptables \
 	traceroute \
 	net-tools \
 	nmap \
 	vim \
 	fail2ban \
+	rsyslog \
 	libpam-google-authenticator 
 
 # Create folder /run/sshd
@@ -31,33 +33,38 @@ RUN echo "root:root" | chpasswd
 RUN useradd -m -s /bin/bash sico &&  echo "sico:sico" | chpasswd
 
 # ---------- SSH HARDENING -----------
-# TODO: Change ssh default port to 2222
+# Change ssh default port to 2222
 RUN sed -i 's/#Port 22/Port 2222/' /etc/ssh/sshd_config 
 
-# TODO: Disable ssh root connection 
+# Disable ssh root connection 
 RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
 RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config
 
-# TODO: Passwd login enable only if not empty
+# Passwd login enable only if not empty
 RUN sed -i 's/#PermitEmptyPasswords no/PermitEmptyPasswords no/' /etc/ssh/sshd_config
 
-# TODO: Pubkey login enable
+# Pubkey login enable
 RUN sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
 
-# TODO: Maximun number of login tries is 2
-# En el proceso de conexión se consumen 2 intentos
-RUN sed -i 's/#MaxAuthTries 6/MaxAuthTries 4/' /etc/ssh/sshd_config
+# Maximun number of login tries is 2
+# ...En el proceso de conexión se consumen 2 intentos
+RUN sed -i 's/#MaxAuthTries 6/MaxAuthTries 6/' /etc/ssh/sshd_config
 
-# TODO: Create a banner
+# Create a banner
 RUN sed -i 's/#Banner none/Banner custom_banner/' /etc/ssh/sshd_config
 
 # TODO: Fail2Ban
-# Create logfile for Fail2ban
+# ---Configure rsyslog to allow authentication logging 
+RUN echo "auth,authpriv.* /var/log/auth.log" >> /etc/rsyslog.conf
+# ---Create logfile for Fail2ban
 RUN sed -i 's/#SyslogFacility AUTH/SyslogFacility AUTH/' /etc/ssh/sshd_config
 RUN sed -i 's/#LogLevel INFO/LogLevel INFO/' /etc/ssh/sshd_config
-# Make sure log file exists
+# ---Make sure log file exists
 RUN touch /var/log/auth.log 
 
 # TODO: Multififactor Authenticator (GoogleAuth)
+#RUN echo "auth required pam_google_authenticator.so" >> /etc/pam.d/sshd
+#RUN sed -i 's/UsePAM yes/UsePAM yes/' /etc/ssh/sshd_config
+#RUN echo "ChallengeResponseAuthentication yes" >> /etc/ssh/sshd_config
 
 CMD ["/start.sh"]
