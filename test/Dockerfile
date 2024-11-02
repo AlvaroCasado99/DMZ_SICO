@@ -48,7 +48,7 @@ RUN sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd
 
 # Maximun number of login tries is 2
 # ...En el proceso de conexión se consumen 2 intentos
-RUN sed -i 's/#MaxAuthTries 6/MaxAuthTries 6/' /etc/ssh/sshd_config
+RUN sed -i 's/#MaxAuthTries 6/MaxAuthTries 5/' /etc/ssh/sshd_config
 
 # Create a banner
 RUN sed -i 's/#Banner none/Banner custom_banner/' /etc/ssh/sshd_config
@@ -56,8 +56,8 @@ RUN sed -i 's/#Banner none/Banner custom_banner/' /etc/ssh/sshd_config
 # TODO: Fail2Ban
 
 # TODO: Multififactor Authenticator (GoogleAuth)
-#RUN echo "auth required pam_google_authenticator.so" >> /etc/pam.d/sshd
-#RUN sed -i 's/UsePAM yes/UsePAM yes/' /etc/ssh/sshd_config
-#RUN echo "ChallengeResponseAuthentication yes" >> /etc/ssh/sshd_config
+# RUN echo "auth required pam_google_authenticator.so" >> /etc/pam.d/sshd
+# RUN sed -i 's/UsePAM yes/UsePAM yes/' /etc/ssh/sshd_config
+# RUN echo "ChallengeResponseAuthentication yes" >> /etc/ssh/sshd_config
 
 CMD ["/start.sh"]

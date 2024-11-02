@@ -32,9 +32,11 @@ iptables -t nat -A POSTROUTING -s 10.5.2.0/24 -o eth1 -j SNAT --to-source 10.5.0
 # --- Configuración de la política para la red DMZ
 # Accesos permitidos tcp desde la red interna
 iptables -A FORWARD -i eth2 -s 10.5.2.0/24 -o eth0 -p tcp --dport 80 -j ACCEPT
+iptables -A FORWARD -i eth2 -s 10.5.2.0/24 -o eth0 -p tcp --dport 443 -j ACCEPT
 
-# Accesos permitidos tcp desde la red externa ¿?
+# Accesos permitidos tcp desde la red externa 
 iptables -A FORWARD -i eth1 -s 10.5.0.0/24 -o eth0 -p tcp --dport 80 -j ACCEPT
+iptables -A FORWARD -i eth1 -s 10.5.0.0/24 -o eth0 -p tcp --dport 443 -j ACCEPT
 
 # Privilegio de administrador para la maquina Int1 
 iptables -A FORWARD -i eth2 -s 10.5.2.20 -o eth0 -p tcp --dport 22 -j ACCEPT

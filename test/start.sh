@@ -1,8 +1,7 @@
 #!/bin/bash
 
 # Initialize google-authenticator
-#google-authenticator
-
+# google-authenticator -f -t -r 3 -R 30 -w 3 -l "docker@hostname" -s /root/.google_authenticator
 
 # Start rsyslog daemon
 rsyslogd

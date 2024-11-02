@@ -2,12 +2,15 @@ FROM ubuntu:latest
 
 EXPOSE 22
 EXPOSE 80
+EXPOSE 443
 
 COPY ./start.sh /start.sh
 COPY ./index.html   /var/www/html/index.html
+COPY ./ssl.conf /etc/apache2/sites-available/ssl.conf
 
 RUN apt-get update && apt-get install -y \
     openssh-server \
+    openssl \
     net-tools \
     iputils-ping \
     traceroute \
@@ -35,5 +38,15 @@ RUN echo 'root:root' | chpasswd
 
 #Doy permisos de ejecucion al start
 RUN chmod +x /start.sh
+
+
+# Configuración SSL para Apache
+# --- Generar un certificado de autofirmado para SSL (tambien la clave privada)
+RUN mkdir -p /etc/apache2/ssl
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/apache2/ssl/server.key -out /etc/apache2/ssl/server.crt \
+    -subj "/C=ES/ST=León/L=León/O=Universidad de León/OU=Facultad de Ingeniería/CN=10.5.1.21"
+RUN a2enmod ssl     # Habilita el módulo SSL en Apache
+RUN a2ensite ssl
+
 
 CMD ["/start.sh"]
