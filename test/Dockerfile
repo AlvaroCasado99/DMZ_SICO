@@ -3,22 +3,23 @@ FROM ubuntu:latest
 EXPOSE 2222
 
 COPY ./start.sh ./start.sh
-COPY ./custom_banner ./custom_banner
 COPY ./fail2ban /etc/fail2ban/jail.local
+COPY ./custom_banner ./custom_banner
 
 # Download dependencies
 RUN apt-get update && apt-get install -y \
-	openssh-server \
-	iputils-ping \
-	iproute2 \
-	iptables \
-	traceroute \
-	net-tools \
-	nmap \
-	vim \
-	fail2ban \
-	rsyslog \
-	libpam-google-authenticator 
+    openssh-server \
+    iputils-ping \
+    iproute2 \
+    iptables \
+    traceroute \
+    net-tools \
+    nmap \
+    vim \
+    fail2ban \
+    rsyslog \
+    # supervisor \ 
+    libpam-google-authenticator 
 
 # Create folder /run/sshd
 RUN mkdir -p /run/sshd
@@ -31,6 +32,9 @@ RUN echo "root:root" | chpasswd
 
 # New user without privilages
 RUN useradd -m -s /bin/bash sico &&  echo "sico:sico" | chpasswd
+
+# Supervisord
+# COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # ---------- SSH HARDENING -----------
 # Change ssh default port to 2222
@@ -53,11 +57,11 @@ RUN sed -i 's/#MaxAuthTries 6/MaxAuthTries 5/' /etc/ssh/sshd_config
 # Create a banner
 RUN sed -i 's/#Banner none/Banner custom_banner/' /etc/ssh/sshd_config
 
-# TODO: Fail2Ban
+# Fail2Ban
 
 # TODO: Multififactor Authenticator (GoogleAuth)
-# RUN echo "auth required pam_google_authenticator.so" >> /etc/pam.d/sshd
-# RUN sed -i 's/UsePAM yes/UsePAM yes/' /etc/ssh/sshd_config
-# RUN echo "ChallengeResponseAuthentication yes" >> /etc/ssh/sshd_config
+RUN sed -i '/@include common-account/a auth required pam_google_authenticator.so' /etc/pam.d/sshd
+RUN sed -i 's/UsePAM yes/UsePAM yes/' /etc/ssh/sshd_config
+RUN echo "ChallengeResponseAuthentication yes" >> /etc/ssh/sshd_config
 
 CMD ["/start.sh"]
