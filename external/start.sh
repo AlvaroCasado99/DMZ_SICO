@@ -10,7 +10,7 @@ route del default gw 10.5.0.254
 ip link set eth0 name ext1
 
 # Iniciar servicio sshd
-/usr/sbin/sshd
+/usr/sbin/sshd -D &
 
 # Iniciar servico httpd
 apache2ctl -D FOREGROUND
