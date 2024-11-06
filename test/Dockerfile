@@ -52,7 +52,7 @@ RUN sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd
 
 # Maximun number of login tries is 2
 # ...En el proceso de conexión se consumen 2 intentos
-RUN sed -i 's/#MaxAuthTries 6/MaxAuthTries 5/' /etc/ssh/sshd_config
+RUN sed -i 's/#MaxAuthTries 6/MaxAuthTries 4/' /etc/ssh/sshd_config
 
 # Create a banner
 RUN sed -i 's/#Banner none/Banner custom_banner/' /etc/ssh/sshd_config
