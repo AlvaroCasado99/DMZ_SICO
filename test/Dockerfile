@@ -62,6 +62,6 @@ RUN sed -i 's/#Banner none/Banner custom_banner/' /etc/ssh/sshd_config
 # TODO: Multififactor Authenticator (GoogleAuth)
 RUN sed -i '/@include common-account/a auth required pam_google_authenticator.so' /etc/pam.d/sshd
 RUN sed -i 's/UsePAM yes/UsePAM yes/' /etc/ssh/sshd_config
-RUN echo "ChallengeResponseAuthentication yes" >> /etc/ssh/sshd_config
+RUN sed -i 's/KbdInteractiveAuthentication no/KbdInteractiveAuthentication yes/' /etc/ssh/sshd_config
 
 CMD ["/start.sh"]
