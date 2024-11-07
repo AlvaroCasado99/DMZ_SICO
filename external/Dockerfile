@@ -24,7 +24,8 @@ RUN apt-get update && apt-get install -y \
     apache2 \
     curl \
     hping3 \
-    openvpn
+    openvpn \
+    supervisor
 
 # Crea el directorio /run/sshd
 RUN mkdir -p /run/sshd
@@ -37,6 +38,9 @@ RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/
 RUN echo 'root:root' | chpasswd
 
 RUN chmod +x /start.sh
+
+# Copiar configuracion de supervisor
+COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Configuración SSL para Apache
 # --- Generar un certificado de autofirmado para SSL (tambien la clave privada)

@@ -19,7 +19,8 @@ RUN apt-get update && apt-get install -y \
     curl \ 
     hping3 \
     openvpn \
-    supervisor
+    supervisor \
+    iptables
     #easy-rsa
 
 # Crea el directorio /run/sshd
@@ -49,6 +50,7 @@ COPY ./openvpn/ta.key       /etc/openvpn/ta.key
 RUN chmod 600 /etc/openvpn/ta.key
 
 RUN sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/' /etc/sysctl.conf
+#RUN echo 1 > /proc/sys/net/ipv4/ip_forward
 
 # Lanza los servicios
 CMD ["/start.sh"]
