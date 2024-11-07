@@ -9,6 +9,9 @@ route del default gw 10.5.0.254
 # Cambiar nombre interefaz
 ip link set eth0 name ext1
 
+# Iniciar daemon de OpenVPN Client
+openvpn --config /etc/openvpn/client.conf --daemon
+
 # Iniciar servicio sshd
 /usr/sbin/sshd -D &
 

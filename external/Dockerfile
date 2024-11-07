@@ -3,6 +3,7 @@ FROM ubuntu:latest
 EXPOSE 22
 EXPOSE 80
 EXPOSE 443
+EXPOSE 1149/udp
 
 COPY ./start.sh /start.sh
 COPY ./index.html   /var/www/html/index.html
@@ -22,7 +23,8 @@ RUN apt-get update && apt-get install -y \
     pkg-config \
     apache2 \
     curl \
-    hping3
+    hping3 \
+    openvpn
 
 # Crea el directorio /run/sshd
 RUN mkdir -p /run/sshd
@@ -43,5 +45,12 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/apache2/ssl
     -subj "/C=ES/ST=León/L=León/O=Universidad de León/OU=Facultad de Ingeniería/CN=10.5.0.20"
 RUN a2enmod ssl     # Habilita el módulo SSL en Apache
 RUN a2ensite ssl 
+
+# Configuracioin de OpenVPN Client
+COPY ./openvpn/ca.crt       /etc/openvpn
+COPY ./openvpn/client.conf  /etc/openvpn
+COPY ./openvpn/client.crt   /etc/openvpn
+COPY ./openvpn/client.key   /etc/openvpn
+COPY ./openvpn/ta.key       /etc/openvpn
 
 CMD ["/start.sh"]

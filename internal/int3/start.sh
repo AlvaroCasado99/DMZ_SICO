@@ -9,5 +9,11 @@ route del default gw 10.5.2.254
 # Cambiar nombre interefaz
 ip link set eth0 name int3
 
+# Iniciar el servidor openvpn
+#openvpn --config /etc/openvpn/server.conf &
+
 # Iniciar servicio sshd
-/usr/sbin/sshd -D
+#/usr/sbin/sshd -D
+
+# Exec supervidord
+/usr/bin/supervisord
