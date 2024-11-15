@@ -10,10 +10,9 @@ route del default gw 10.5.2.254
 ip link set eth0 name int3
 
 # Reglas Server VPN
-#iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o int3 -j SNAT --to-source 10.5.2.22
-#iptables -A FORWARD -i tun0 -o int3 -s 10.8.0.0/24 -d 10.5.2.0/24 -j ACCEPT
-#iptables -A FORWARD -i int3 -o tun0 -s 10.5.2.0/24 -d 10.8.0.0/24 -j ACCEPT
-#iptables -A INPUT -i tun0 -j ACCEPT
+iptables -A FORWARD -i tun0 -o int3 -s 10.8.0.0/24 -d 10.5.2.0/24 -j ACCEPT
+iptables -A FORWARD -i int3 -o tun0 -s 10.5.2.0/24 -d 10.8.0.0/24 -j ACCEPT
+iptables -A INPUT -i tun0 -j ACCEPT
 
 # Iniciar el servidor openvpn
 #openvpn --config /etc/openvpn/server.conf &

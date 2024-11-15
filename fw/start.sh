@@ -54,15 +54,13 @@ iptables -A INPUT -p icmp --icmp-type echo-request -m limit --limit 5/minute --l
 
 # ======================================
 # ===== Configuracion para OpenVPN =====
-# Establecer conexion inicial entre ServidorVPN y ClienteVPN
-iptables -A FORWARD -i eth1 -s 10.5.0.20 -o eth2 -d 10.5.2.22 -p udp --dport 1194 -j ACCEPT
+# Permitir conexiones UDP entre la red interna y externa 
+iptables -A FORWARD -i eth1  -o eth2 -p udp --dport 1194 -j ACCEPT
 
-iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o int3 -j SNAT --to-source 10.5.2.22
-
-iptables -A FORWARD -i tun0 -o int3 -s 10.8.0.0/24 -d 10.5.2.0/24 -j ACCEPT
-iptables -A FORWARD -i int3 -o tun0 -s 10.5.2.0/24 -d 10.8.0.0/24 -j ACCEPT
-
-iptables -A INPUT -i tun0 -j ACCEPT
+#iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o int3 -j SNAT --to-source 10.5.2.22
+#iptables -A FORWARD -i tun0 -o int3 -s 10.8.0.0/24 -d 10.5.2.0/24 -j ACCEPT
+#iptables -A FORWARD -i int3 -o tun0 -s 10.5.2.0/24 -d 10.8.0.0/24 -j ACCEPT
+#iptables -A INPUT -i tun0 -j ACCEPT
 
 # Iniciar servicio sshd
 /usr/sbin/sshd -D
