@@ -9,9 +9,14 @@ route del default gw 10.5.1.254
 # Cambiar nombre interefaz
 ip link set eth0 name dmz1
 
+# Cowrie
+iptables -t nat -A PREROUTING -p tcp --dport 22 -j REDIRECT --to-port 2222
+
 # Iniciar servicio sshd
-/usr/sbin/sshd -D &
+#/usr/sbin/sshd -D &
 
 # Iniciar servico httpd
-apache2ctl -D FOREGROUND
+#apache2ctl -D FOREGROUND
 
+# Exec supervidord
+/usr/bin/supervisord

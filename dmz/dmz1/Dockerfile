@@ -1,6 +1,7 @@
 FROM ubuntu:latest
 
-EXPOSE 22
+#EXPOSE 22
+EXPOSE 2222
 EXPOSE 80
 expose 443
 
@@ -22,7 +23,17 @@ RUN apt-get update && apt-get install -y \
     pkg-config \
     apache2 \
     curl \
-    hping3
+    hping3 \
+	git \
+	python3-venv \
+	libssl-dev \
+	libffi-dev \
+	build-essential \
+	libpython3-dev \
+	python3-minimal \
+	authbind \
+	iptables \
+    supervisor
 
 # Crea el directorio /run/sshd
 RUN mkdir -p /run/sshd
@@ -42,6 +53,9 @@ RUN useradd -m sico && echo 'sico:sico' | chpasswd
 #Doy permisos de ejecucion al start
 RUN chmod +x /start.sh
 
+# Copiar configuracion de supervisor
+COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
 
 # Configuración SSL para Apache
 # --- Generar un certificado de autofirmado para SSL (tambien la clave privada)
@@ -51,5 +65,20 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/apache2/ssl
 RUN a2enmod ssl     # Habilita el módulo SSL en Apache
 RUN a2ensite ssl
 
+# COnfiguracion de cowrie
+RUN adduser --disabled-password cowrie
+USER cowrie
+WORKDIR /home/cowrie
+RUN git clone http://github.com/cowrie/cowrie
+WORKDIR /home/cowrie/cowrie
+RUN python3 -m venv cowrie-env
+RUN cowrie-env/bin/pip install --upgrade pip
+RUN cowrie-env/bin/pip install --upgrade -r requirements.txt
+COPY --chown=cowrie:cowrie ./cowrie/cowrie.cfg /home/cowrie/cowrie/etc/cowrie.cfg
+COPY --chown=cowrie:cowrie ./cowrie/userdb.txt /home/cowrie/cowrie/etc/userdb.txt
+
+# Volver al usuario root
+USER root
+WORKDIR /
 
 CMD ["/start.sh"]

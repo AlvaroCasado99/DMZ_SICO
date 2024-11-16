@@ -62,5 +62,14 @@ iptables -A FORWARD -i eth1  -o eth2 -p udp --dport 1194 -j ACCEPT
 #iptables -A FORWARD -i int3 -o tun0 -s 10.5.2.0/24 -d 10.8.0.0/24 -j ACCEPT
 #iptables -A INPUT -i tun0 -j ACCEPT
 
+
+
+# ========================================= 
+# ================= COWRIE ================
+# Permitir conexiones a la dmz1 desde las redes internas y externas
+iptables -A FORWARD -i eth2 -d 10.5.1.20 -p tcp -dport 22 -j ACCEPT
+iptables -A FORWARD -i eth1 -d 10.5.1.20 -p tcp -dport 22 -j ACCEPT
+
+
 # Iniciar servicio sshd
 /usr/sbin/sshd -D
