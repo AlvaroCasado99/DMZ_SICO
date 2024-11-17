@@ -9,6 +9,12 @@ route del default gw 10.5.1.254
 # Cambiar nombre interefaz
 ip link set eth0 name dmz2
 
+# Start rsyslog daemon
+rsyslogd
+
+# Start Fail2Ban service
+fail2ban-server -f &
+
 # Iniciar servicio sshd
 /usr/sbin/sshd -D &
 

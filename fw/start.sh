@@ -49,7 +49,9 @@ iptables -A FORWARD -i eth2 -s 10.5.2.20 -o eth0 -p tcp --dport 22 -j ACCEPT
 # Prevenir ataques DoS con ICMP desde la red DMZ al fw
 iptables -A INPUT -p icmp --icmp-type echo-request -m limit --limit 5/minute --limit-burst 5 -j ACCEPT
 
-
+# ======================================
+# =========== SSH Hardening ============
+iptables -A FORWARD -i eth2 -o eth0 -p tcp --dport 2222 -j ACCEPT
 
 
 # ======================================
@@ -57,18 +59,12 @@ iptables -A INPUT -p icmp --icmp-type echo-request -m limit --limit 5/minute --l
 # Permitir conexiones UDP entre la red interna y externa 
 iptables -A FORWARD -i eth1  -o eth2 -p udp --dport 1194 -j ACCEPT
 
-#iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o int3 -j SNAT --to-source 10.5.2.22
-#iptables -A FORWARD -i tun0 -o int3 -s 10.8.0.0/24 -d 10.5.2.0/24 -j ACCEPT
-#iptables -A FORWARD -i int3 -o tun0 -s 10.5.2.0/24 -d 10.8.0.0/24 -j ACCEPT
-#iptables -A INPUT -i tun0 -j ACCEPT
 
-
-
-# ========================================= 
+# =========================================
 # ================= COWRIE ================
 # Permitir conexiones a la dmz1 desde las redes internas y externas
-iptables -A FORWARD -i eth2 -d 10.5.1.20 -p tcp -dport 22 -j ACCEPT
-iptables -A FORWARD -i eth1 -d 10.5.1.20 -p tcp -dport 22 -j ACCEPT
+iptables -A FORWARD -i eth2 -d 10.5.1.20 -p tcp --dport 22 -j ACCEPT
+iptables -A FORWARD -i eth1 -d 10.5.1.20 -p tcp --dport 22 -j ACCEPT
 
 
 # Iniciar servicio sshd

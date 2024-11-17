@@ -3,7 +3,7 @@ FROM ubuntu:latest
 #EXPOSE 22
 EXPOSE 2222
 EXPOSE 80
-expose 443
+EXPOSE 443
 
 COPY ./start.sh /start.sh
 COPY ./index.html   /var/www/html/index.html

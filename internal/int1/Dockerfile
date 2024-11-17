@@ -28,4 +28,9 @@ RUN echo 'root:root' | chpasswd
 
 RUN chmod +x /start.sh
 
+
+# Obtener las claves ssh
+COPY ./ssh/id_rsa.pub /root/.ssh
+COPY ./ssh/id_rsa /root/.ssh
+
 CMD ["/start.sh"]
